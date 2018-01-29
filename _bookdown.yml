@@ -1,6 +1,6 @@
-book_filename: "Report-1702"
+book_filename: "Report-1801"
 chapter_name: ""
-repo: https://github.com/WeeBeasties/1702
+repo: https://github.com/WeeBeasties/1801
 output_dir: docs
 rmd_files:
   html: ["index.Rmd","references.Rmd"]
@@ -8,4 +8,4 @@ rmd_files:
 clean: [packages.bib, bookdown.bbl]
 new_session: no
 comments: true
-edit: https://github.com/WeeBeasties/1702/blob/master/%s
+edit: https://github.com/WeeBeasties/1801/blob/master/%s
