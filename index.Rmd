@@ -151,8 +151,7 @@ Do you think that there are too many exams in this mix? What is the desired bala
 
 Here, I am attempting to embed a shiny app into this bookdown document.
 
-`r knitr::include_app("https://www.cliftonfranklund.com/shiny/Dashboard/", 
-  height = "600px")`
+`r knitr::include_app("https://www.cliftonfranklund.com/shiny/Dashboard/", height = "500px")`
 
 
 
