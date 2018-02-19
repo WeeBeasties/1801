@@ -147,6 +147,12 @@ ggplot(measureCounts, aes(x=MEASURE, y=COUNT)) +
 Do you think that there are too many exams in this mix? What is the desired balance between exams, products, and performances for General Education?
 ```
 
+## Shiny app  
+
+Here, I am attempting to embed a shiny app into this bookdown document.
+
+`r knitr::include_app("https://www.cliftonfranklund.com/shiny/Dashboard/", 
+  height = "600px")`
 
 
 
