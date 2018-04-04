@@ -34,7 +34,7 @@ library(pander)         # used to report session settings
 
 
 # Abstract {#abstract -}
-> "Assessment is not a spreadsheet; it's a conversation."
+> *Assessment is not a spreadsheet; it's a conversation.*   
 > --- Irmeli Halinen
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pellentesque tortor ac turpis congue venenatis. Curabitur congue justo est, non feugiat massa euismod sit amet. Fusce tincidunt, sapien in malesuada tempus, sem mi interdum turpis, in finibus sem nisl sed ex. Mauris in tristique nisl. Nunc pellentesque metus et velit aliquam, eu rhoncus diam condimentum. Quisque nec libero at odio tempor aliquam. Fusce at lacus porttitor, lobortis nisl nec, commodo tellus. Phasellus interdum sapien varius ipsum consectetur tincidunt. Aenean posuere turpis at efficitur lobortis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pellentesque tortor ac turpis congue venenatis. Curabitur congue justo est, non feugiat massa euismod sit amet. Fusce tincidunt, sapien in malesuada tempus, sem mi interdum turpis, in finibus sem nisl sed ex. Mauris in tristique nisl. Nunc pellentesque metus et velit aliquam, eu rhoncus diam condimentum. Quisque nec libero at odio tempor aliquam. Fusce at lacus porttitor, lobortis nisl nec, commodo tellus. Phasellus interdum sapien varius ipsum consectetur tincidunt. Aenean posuere turpis at efficitur lobortis. 
@@ -119,7 +119,32 @@ measureCounts <- myData %>%
 	summarise(COUNT=n())
 ```
  
-A total of `r length(myData$COMPETENCY)` registrations have been completed as of `r format(Sys.Date(),format="%B %d, %Y")`. This represents the efforts of `r length(unique(rawData$NAME))` faculty, and includes a total of `r length(unique(rawData$COURSE))` different courses. The distribution of the registrations between the eight core competencies is shown in figure \@ref(fig:plotByCompetency).
+A total of `r length(myData$COMPETENCY)` registrations have been completed as of `r format(Sys.Date(),format="%B %d, %Y")`. This represents the efforts of `r length(unique(rawData$NAME))` faculty, and includes a total of `r length(unique(rawData$COURSE))` different courses. These numbers are down from last semester as shown by Figure \@ref(fig:comparison).
+
+```{r comparison, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Comparison of registrations between Fall 2017 and Spring 2018."}
+group <- c("Registrations","Registrations","Faculty","Faculty","Courses","Courses")
+semester <- c("Fall 2017","Spring 2018","Fall 2017","Spring 2018","Fall 2017","Spring 2018")
+total <- c(281,length(rawData$COMPETENCY),123,length(unique(rawData$NAME)),138,length(unique(rawData$COURSE)))
+myData <- data.frame(Group=group,Semester=semester,Total=total)
+ggplot(data=myData, aes(x=Semester, y=Total, fill=Semester)) +
+  geom_bar(stat="identity", position="dodge") +
+  geom_text(aes(label=Total), vjust=1.6, color="white", size=5) +
+  scale_fill_manual(values=c("firebrick", "gold")) +
+  facet_grid(.~Group) +
+  theme_bw() +
+  theme(legend.position="none") +
+  theme(strip.background = element_rect(fill="gray25")) +
+  theme(strip.text = element_text(colour="white", size=12, face="bold"))
+```
+
+As compared to Fall 2017, the total number of registrations was down by `r round(100*(1-(length(rawData$COMPETENCY)/281)),1)`%. Moreover, the number of faculty members registering to report assessment was strongly down (by `r round(100*(1-(length(unique(rawData$NAME))/123)),1)`%). This primarily reflects the fact the the Ferris Non-Tenured Faculty Organization members have elected to not participate in assessment. Since those members registered but did not report data last semester, the actual amound of data that we collect this semester may still be similar to that of last semester. Finally, the number of courses reporting is also down this semester (by `r round(100*(1-(length(unique(rawData$COURSE))/138)),1)`%). This may reflect an actual difference in the number of General Education courses offered each semester. Or... it may just reflect a decreasing rate of partipation in this process.
+
+```{block question1, type='question'}
+Are you concerned by the decrease in registrations this semester? What factors do you think are contributing to this trend? What suggestions do you have to address the decrease in registrations?
+```
+
+
+The distribution of the registrations between the eight core competencies for the spring semester is shown in Figure \@ref(fig:plotByCompetency).
 
 ```{r plotByCompetency, echo=FALSE, fig.cap="Distribution of course registrations by core competency."}
 # Plot of registrations by competency -------------------------------------
@@ -134,6 +159,7 @@ ggplot(competencyCounts, aes(x=COMPETENCY, y=COUNT)) +
 - A total of `r sum(measureCounts[grepl("05|06|07|08|09|10|11",measureCounts$MEASURE), 2])` student products were registered (`r round(sum(measureCounts[grepl("05|06|07|08|09|10|11",measureCounts$MEASURE), 2])/length(myData$COMPETENCY)*100,1)`%).  
 - A total of `r sum(measureCounts[grepl("12|13|14",measureCounts$MEASURE), 2])` student performances were registered (`r round(sum(measureCounts[grepl("12|13|14",measureCounts$MEASURE), 2])/length(myData$COMPETENCY)*100,1)`%).  
 
+
 ```{r plotByMeasure, echo=FALSE, fig.cap="Distribution of course registrations by standardized measure."}
 # Plot of registrations by measure ----------------------------------------
 ggplot(measureCounts, aes(x=MEASURE, y=COUNT)) +
@@ -143,7 +169,7 @@ ggplot(measureCounts, aes(x=MEASURE, y=COUNT)) +
 	coord_flip()
 ```
 
-```{block question1, type='question'}
+```{block question2, type='question'}
 Do you think that there are too many exams in this mix? What is the desired balance between exams, products, and performances for General Education?
 ```
 
