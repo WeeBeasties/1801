@@ -97,7 +97,7 @@ write.csv(myData, file="docs/data/registrations.csv", row.names = FALSE)
 # UNCOMMENT THIS BLOCK TO READ THE CSV FILE FOR THE DATA
 # personal identifying information has been removed...
 
-#myData <- read.csv("data/Fall2017.csv")
+#myData <- read.csv("data/Spring2018.csv")
 #names(myData)[names(myData) == 'CORE.COMPETENCY'] <- 'COMPETENCY'
 #names(myData)[names(myData) == 'STANDARD.MEASURE'] <- 'MEASURE'
 #myData$COMPETENCY <- factor(myData$COMPETENCY, levels = rev(levels(myData$COMPETENCY))) 
