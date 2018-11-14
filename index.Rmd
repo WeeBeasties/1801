@@ -75,33 +75,33 @@ All of the de-identified data, analysis code, and documentation that constitute 
 ```{R getData, echo=FALSE, message=FALSE, warning=FALSE}
 # UNCOMMENT THIS BLOCK TO GET THE DATA FROM GOOGLE
 # authentication may be required via a web browswer for access...
-myGoogleSheet <- gs_title("Core Competency Assessment  (Responses)")
-rawData <- myData <- gs_read(ss = myGoogleSheet, ws = "Form Responses 1")
-names(rawData)[names(rawData) == 'CORE COMPETENCY'] <- 'COMPETENCY'
-names(rawData)[names(rawData) == 'STANDARD MEASURE'] <- 'MEASURE'
+#myGoogleSheet <- gs_title("Core Competency Assessment  (Responses)")
+#rawData <- myData <- gs_read(ss = myGoogleSheet, ws = "Form Responses 1")
+#names(rawData)[names(rawData) == 'CORE COMPETENCY'] <- 'COMPETENCY'
+#names(rawData)[names(rawData) == 'STANDARD MEASURE'] <- 'MEASURE'
 
-myDups <- rawData %>% group_by(COMPETENCY,EMAIL,MEASURE) %>% filter(n()>1) %>% arrange(EMAIL,MEASURE,COMPETENCY,COURSE)
+#myDups <- rawData %>% group_by(COMPETENCY,EMAIL,MEASURE) %>% filter(n()>1) %>% arrange(EMAIL,MEASURE,COMPETENCY,COURSE)
 
-myData <- as.data.frame(rawData)
-myData$COMPETENCY <- as.factor(myData$COMPETENCY)
-myData$COMPETENCY <- factor(myData$COMPETENCY, levels=rev(levels(myData$COMPETENCY)))
+#myData <- as.data.frame(rawData)
+#myData$COMPETENCY <- as.factor(myData$COMPETENCY)
+#myData$COMPETENCY <- factor(myData$COMPETENCY, levels=rev(levels(myData$COMPETENCY)))
 
-myData$MEASURE <- as.factor(myData$MEASURE)
-myData$MEASURE <- factor(myData$MEASURE, levels=rev(levels(myData$MEASURE)))
-myData <- myData[ ,-c(1,4,5,7,8)]
+#myData$MEASURE <- as.factor(myData$MEASURE)
+#myData$MEASURE <- factor(myData$MEASURE, levels=rev(levels(myData$MEASURE)))
+#myData <- myData[ ,-c(1,4,5,7,8)]
 
-write.csv(myData, file="data/registrations.csv", row.names = FALSE)
-write.csv(myData, file="docs/data/registrations.csv", row.names = FALSE)
+#write.csv(myData, file="data/registrations.csv", row.names = FALSE)
+#write.csv(myData, file="docs/data/registrations.csv", row.names = FALSE)
 
 
 # UNCOMMENT THIS BLOCK TO READ THE CSV FILE FOR THE DATA
 # personal identifying information has been removed...
 
-#myData <- read.csv("data/Spring2018.csv")
-#names(myData)[names(myData) == 'CORE.COMPETENCY'] <- 'COMPETENCY'
-#names(myData)[names(myData) == 'STANDARD.MEASURE'] <- 'MEASURE'
-#myData$COMPETENCY <- factor(myData$COMPETENCY, levels = rev(levels(myData$COMPETENCY))) 
-#myData$MEASURE <- factor(myData$MEASURE, levels = rev(levels(myData$MEASURE)))
+myData <- read.csv("data/Spring2018.csv")
+names(myData)[names(myData) == 'CORE.COMPETENCY'] <- 'COMPETENCY'
+names(myData)[names(myData) == 'STANDARD.MEASURE'] <- 'MEASURE'
+myData$COMPETENCY <- factor(myData$COMPETENCY, levels = rev(levels(myData$COMPETENCY))) 
+myData$MEASURE <- factor(myData$MEASURE, levels = rev(levels(myData$MEASURE)))
 
 ```
 
@@ -119,12 +119,12 @@ measureCounts <- myData %>%
 	summarise(COUNT=n())
 ```
  
-A total of `r length(myData$COMPETENCY)` registrations have been completed as of `r format(Sys.Date(),format="%B %d, %Y")`. This represents the efforts of `r length(unique(rawData$NAME))` faculty, and includes a total of `r length(unique(rawData$COURSE))` different courses. These numbers are down from last semester as shown by Figure \@ref(fig:comparison).
+A total of `r length(myData$COMPETENCY)` registrations have been completed as of `r format(Sys.Date(),format="%B %d, %Y")`. This represents the efforts of `r length(unique(myData$NAME))` faculty, and includes a total of `r length(unique(myData$COURSE))` different courses. These numbers are down from last semester as shown by Figure \@ref(fig:comparison).
 
 ```{r comparison, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Comparison of registrations between Fall 2017 and Spring 2018."}
 group <- c("Registrations","Registrations","Faculty","Faculty","Courses","Courses")
 semester <- c("Fall 2017","Spring 2018","Fall 2017","Spring 2018","Fall 2017","Spring 2018")
-total <- c(281,length(rawData$COMPETENCY),123,length(unique(rawData$NAME)),138,length(unique(rawData$COURSE)))
+total <- c(281,length(myData$COMPETENCY),123,length(unique(myData$NAME)),138,length(unique(myData$COURSE)))
 myData <- data.frame(Group=group,Semester=semester,Total=total)
 ggplot(data=myData, aes(x=Semester, y=Total, fill=Semester)) +
   geom_bar(stat="identity", position="dodge") +
@@ -137,7 +137,7 @@ ggplot(data=myData, aes(x=Semester, y=Total, fill=Semester)) +
   theme(strip.text = element_text(colour="white", size=12, face="bold"))
 ```
 
-As compared to Fall 2017, the total number of registrations was down by `r round(100*(1-(length(rawData$COMPETENCY)/281)),1)`%. Moreover, the number of faculty members registering to report assessment was strongly down (by `r round(100*(1-(length(unique(rawData$NAME))/123)),1)`%). This primarily reflects the fact the the Ferris Non-Tenured Faculty Organization members have elected to not participate in assessment. Since those members registered but did not report data last semester, the actual amound of data that we collect this semester may still be similar to that of last semester. Finally, the number of courses reporting is also down this semester (by `r round(100*(1-(length(unique(rawData$COURSE))/138)),1)`%). This may reflect an actual difference in the number of General Education courses offered each semester. Or... it may just reflect a decreasing rate of partipation in this process.
+As compared to Fall 2017, the total number of registrations was down by `r round(100*((281-173)/281),1)`%. Moreover, the number of faculty members registering to report assessment was strongly down (by `r round(100*((123-62)/123),1)`%). This primarily reflects the fact the the Ferris Non-Tenured Faculty Organization members have elected to not participate in assessment. Since those members registered but did not report data last semester, the actual amound of data that we collect this semester may still be similar to that of last semester. Finally, the number of courses reporting is also down this semester (by `r round(100*((138-107)/138),1)`%). This may reflect an actual difference in the number of General Education courses offered each semester. Or... it may just reflect a decreasing rate of partipation in this process.
 
 ```{block question1, type='question'}
 Are you concerned by the decrease in registrations this semester? What factors do you think are contributing to this trend? What suggestions do you have to address the decrease in registrations?
